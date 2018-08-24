@@ -1,3 +1,7 @@
+# Ignore main and output
+Main.*
+out/
+
 # Ignore IDEA stuff
 .idea/
 .iml
