@@ -1,5 +1,6 @@
-# Ignore IDEA directory
+# Ignore IDEA stuff
 .idea/
+.iml
 
 # Compiled class file
 *.class
