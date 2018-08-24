@@ -1,4 +1,4 @@
-package planning.enviro;
+package planning.geom;
 
 public enum GridState {
     EMPTY,
