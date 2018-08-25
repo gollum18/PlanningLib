@@ -2,6 +2,9 @@ package planning.agent;
 
 import planning.geom.Point;
 
+/**
+ * Defines a generic node used by search agents.
+ */
 public class Node {
 
     /*

@@ -5,61 +5,14 @@ import planning.geom.Point;
 
 import java.util.LinkedList;
 
+/**
+ * Defines an abstract Agent for creating search agents.
+ */
 public abstract class Agent {
-
-    /*
-        Fields
-     */
-
-    private Point mStart;
-    private Point mGoal;
-
-    /*
-        Constructors
-     */
-
-    /**
-     * Creates an instance of an Agent with the given specifications.
-     * @param sx The starting x ordinal.
-     * @param sy The starting y ordinal.
-     * @param gx The goal x ordinal.
-     * @param gy The goal y ordinal.
-     */
-    public Agent(int sx, int sy, int gx, int gy) {
-        mStart = new Point(sx, sy);
-        mGoal = new Point(gx, gy);
-    }
-
-    /*
-        Accessors/Mutators
-     */
-
-    /**
-     * Returns the starting position.
-     * @return Point: The starting position.
-     */
-    public Point getStart() {
-        return mStart;
-    }
-
-    /**
-     * Returns the goal position.
-     * @return Point: The goal position.
-     */
-    public Point getGoal() {
-        return mGoal;
-    }
 
     /*
         Methods
      */
-
-    /**
-     * Generates a list containing the path.
-     * @param grid The grid to path find across.
-     * @return LinkedList: A list containing the path.
-     */
-    public abstract LinkedList<Point> traverse(Grid grid);
 
     /**
      * Generates a list of points that represent the path.
@@ -79,12 +32,31 @@ public abstract class Agent {
     }
 
     /**
-     * Determines if a node is equal to the goal position.
-     * @param node Node: The node to check.
-     * @return boolean: Whether the position is equal to the goal or not.
+     * Smooths the path by removing unnecessary vertices with line of sight.
+     * @param path LinkedList: A list of points containing the path found by the agent.
+     * @param grid Grid: The search grid used to find the path. Needed for line of sight functionality.
+     * @return LinkedList: A list of points containing a smoothed path.
      */
-    public boolean isGoalNode(Node node) {
-        return mGoal.getX() == node.getPosition().getX() && mGoal.getY() == node.getPosition().getY();
+    public LinkedList<Point> smoothPath(LinkedList<Point> path, Grid grid) {
+        LinkedList<Point> smoothedPath = new LinkedList<>();
+        int k = 0;
+        Point prev = path.get(0);
+        for (int i = 1; i < path.size() - 1; i++) {
+            if (!grid.lineOfSight(prev, path.get(i+1))) {
+                k += 1;
+                smoothedPath.add(path.get(i));
+            }
+        }
+        k += 1;
+        smoothedPath.add(path.get(k)); // Add the goal
+        return smoothedPath;
     }
+
+    /**
+     * Generates a list containing the path.
+     * @param grid The grid to path find across.
+     * @return LinkedList: A list containing the path.
+     */
+    public abstract LinkedList<Point> traverse(Grid grid);
 
 }

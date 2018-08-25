@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
+/**
+ * Defines an A* search agent for generating paths using various heuristics.
+ */
 public class AStarAgent extends Agent {
 
     /*
@@ -24,13 +27,10 @@ public class AStarAgent extends Agent {
 
     /**
      * Creates an A* agent with the specified parameters.
-     * @param sx int: The start x ordinal.
-     * @param sy int: The start y ordinal.
-     * @param gx int: The goal x ordinal.
-     * @param gy int: The goal y ordinal.
+     * @param heuristic: The heuristic to use for the A* agent.
      */
-    public AStarAgent(int sx, int sy, int gx, int gy, Heuristic heuristic) {
-        super(sx, sy, gx, gy);
+    public AStarAgent(Heuristic heuristic) {
+        super();
         mOpenList = new PriorityQueue<>();
         mClosedList = new HashSet<>();
         eHeuristic = heuristic;
@@ -66,48 +66,39 @@ public class AStarAgent extends Agent {
      * @return LinkedList: A list containing the path if it found. May return null if no path is found.
      */
     public LinkedList<Point> traverse(Grid grid) {
-        // Clear the lists
         mOpenList.clear();
         mClosedList.clear();
-        // Add the start node to the open list
-        mOpenList.add(new AStarNode(getStart()));
-        // Stores the node on the current iteration
+        mOpenList.add(new AStarNode(grid.getStart()));
         AStarNode current = null;
-        // Loop until we reach the goal
         while (!mOpenList.isEmpty()) {
-            // Get the top node
             current = mOpenList.poll();
             mClosedList.add(current.getPosition());
-            // Check if it is the goal, return the path if it is
-            if (isGoalNode(current)) {
+            if (grid.isGoalNode(current)) {
                 return generatePath(current);
             }
-            // Loop through the neighbors
             for (Point p : grid.generateNeighbors(current.getPosition().getX(),
                     current.getPosition().getY())) {
-                // Skip neighbors that are already in the open list or have been evaluated
-                if (mOpenList.contains(p) || mClosedList.contains(p)) {
+                AStarNode node = new AStarNode(p, current);
+                if (mOpenList.contains(node) || mClosedList.contains(p)) {
                     continue;
                 }
-                // Calculate the f-score and add the node to the open list
-                AStarNode node = new AStarNode(p, current);
                 node.setGScore(current.getGScore() + 1);
                 switch (eHeuristic) {
                     case EUCLIDEAN:
                         node.setFScore(node.getGScore() + GeoMath.euclideanDistance(current.getPosition().getX(),
-                            current.getPosition().getY(), getGoal().getX(), getGoal().getY()));
+                            current.getPosition().getY(), grid.getGoal().getX(), grid.getGoal().getY()));
                         break;
                     case MANHATTAN:
                         node.setFScore(node.getGScore() + GeoMath.manhattanDistance(current.getPosition().getX(),
-                                current.getPosition().getY(), getGoal().getX(), getGoal().getY()));
+                                current.getPosition().getY(), grid.getGoal().getX(), grid.getGoal().getY()));
                         break;
                     case OCTILE:
                         node.setFScore(node.getGScore() + GeoMath.octileDistance(current.getPosition().getX(),
-                                current.getPosition().getY(), getGoal().getX(), getGoal().getY()));
+                                current.getPosition().getY(), grid.getGoal().getX(), grid.getGoal().getY()));
                         break;
                     default:
                         node.setFScore(node.getGScore() + GeoMath.octileDistance(current.getPosition().getX(),
-                                current.getPosition().getY(), getGoal().getX(), getGoal().getY()));
+                                current.getPosition().getY(), grid.getGoal().getX(), grid.getGoal().getY()));
                         break;
                 }
                 mOpenList.add(node);

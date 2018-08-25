@@ -1,6 +1,6 @@
 package planning.geom;
 
-public enum GridState {
+public enum State {
     EMPTY,
     OCCUPIED,
     PROTECTED,

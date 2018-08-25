@@ -2,6 +2,9 @@ package planning.agent;
 
 import planning.geom.Point;
 
+/**
+ * Defines a node used with A* search variants.
+ */
 public class AStarNode extends Node implements Comparable<AStarNode> {
 
     /*
@@ -104,7 +107,7 @@ public class AStarNode extends Node implements Comparable<AStarNode> {
             return false;
         }
         AStarNode n = (AStarNode)object;
-        return getPosition().getX() == n.getPosition().getX() && getPosition().getY() == n.getPosition().getY();
+        return getPosition().equals(n.getPosition());
     }
 
     /**
