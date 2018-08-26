@@ -11,6 +11,92 @@ import java.util.LinkedList;
 public abstract class Agent {
 
     /*
+        Fields
+     */
+    private Point mStart;               // The start point
+    private Point mGoal;                // The goal point
+
+    /*
+        Constructors
+     */
+
+    /**
+     * Acts as a base constructor for agents.
+     * @param sx int: The x ordinal of the starting point.
+     * @param sy int: The y ordinal of the starting point.
+     * @param gx int: The x ordinal of the goal point.
+     * @param gy int: The y ordinal of the goal point.
+     */
+    public Agent(int sx, int sy, int gx, int gy) {
+        mStart = new Point(sx, sy);
+        mGoal = new Point(gx, gy);
+    }
+
+    /**
+     * Acts as a base constructor for aagents.
+     * @param start Point: The starting location.
+     * @param goal Point: The goal location.
+     */
+    public Agent(Point start, Point goal) {
+        mStart = start;
+        mGoal = goal;
+    }
+
+    /*
+        Accessors/Mutators
+     */
+
+    /**
+     * Gets the starting location of the agent.
+     * @return Point: The starting location.
+     */
+    public Point getStart() {
+        return mStart;
+    }
+
+    /**
+     * Updates the starting location of the agent using a coordinate.
+     * @param sx int: The x ordinal of the new starting location.
+     * @param sy int: The y ordinal of the new starting location.
+     */
+    public void setStart(int sx, int sy) {
+        mStart = new Point(sx, sy);
+    }
+
+    /**
+     * Updates the starting location of the agent using a point.
+     * @param point Point: The new starting location.
+     */
+    public void setStart(Point point) {
+        mStart = point;
+    }
+
+    /**
+     * Gets the goal location of an agent.
+     * @return Point: The goal location.
+     */
+    public Point getGoal() {
+        return mGoal;
+    }
+
+    /**
+     * Updates the goal location of an agent using a coordinate.
+     * @param sx int: The x ordinal of the new goal location.
+     * @param sy int: The y ordinal of the new goal location.
+     */
+    public void setGoal(int sx, int sy) {
+        mGoal = new Point(sx, sy);
+    }
+
+    /**
+     * Updates the goal location of an agent using a point.
+     * @param point Point: The new goal location.
+     */
+    public void setGoal(Point point) {
+        mGoal = point;
+    }
+
+    /*
         Methods
      */
 
@@ -50,6 +136,15 @@ public abstract class Agent {
         k += 1;
         smoothedPath.add(path.get(k)); // Add the goal
         return smoothedPath;
+    }
+
+    /**
+     * Determines if a node is equal to the goal position.
+     * @param node Node: The node to check.
+     * @return boolean: Whether the position is equal to the goal or not.
+     */
+    public boolean isGoalNode(Node node) {
+        return mGoal.getX() == node.getPosition().getX() && mGoal.getY() == node.getPosition().getY();
     }
 
     /**

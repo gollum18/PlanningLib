@@ -29,11 +29,15 @@ public class AStarAgent extends Agent {
      * Creates an A* agent with the specified parameters.
      * @param heuristic: The heuristic to use for the A* agent.
      */
-    public AStarAgent(Heuristic heuristic) {
-        super();
+    public AStarAgent(int sx, int sy, int gx, int gy, Heuristic heuristic) {
+        super(sx, sy, gx, gy);
         mOpenList = new PriorityQueue<>();
         mClosedList = new HashSet<>();
         eHeuristic = heuristic;
+    }
+
+    public AStarAgent(Point start, Point goal, Heuristic heuristic) {
+        this(start.getX(), start.getY(), goal.getX(), goal.getY(), heuristic);
     }
 
     /*
@@ -68,12 +72,12 @@ public class AStarAgent extends Agent {
     public LinkedList<Point> traverse(Grid grid) {
         mOpenList.clear();
         mClosedList.clear();
-        mOpenList.add(new AStarNode(grid.getStart()));
+        mOpenList.add(new AStarNode(getStart()));
         AStarNode current = null;
         while (!mOpenList.isEmpty()) {
             current = mOpenList.poll();
             mClosedList.add(current.getPosition());
-            if (grid.isGoalNode(current)) {
+            if (isGoalNode(current)) {
                 return generatePath(current);
             }
             for (Point p : grid.generateNeighbors(current.getPosition().getX(),
@@ -86,19 +90,19 @@ public class AStarAgent extends Agent {
                 switch (eHeuristic) {
                     case EUCLIDEAN:
                         node.setFScore(node.getGScore() + GeoMath.euclideanDistance(current.getPosition().getX(),
-                            current.getPosition().getY(), grid.getGoal().getX(), grid.getGoal().getY()));
+                            current.getPosition().getY(), getGoal().getX(), getGoal().getY()));
                         break;
                     case MANHATTAN:
                         node.setFScore(node.getGScore() + GeoMath.manhattanDistance(current.getPosition().getX(),
-                                current.getPosition().getY(), grid.getGoal().getX(), grid.getGoal().getY()));
+                                current.getPosition().getY(), getGoal().getX(), getGoal().getY()));
                         break;
                     case OCTILE:
                         node.setFScore(node.getGScore() + GeoMath.octileDistance(current.getPosition().getX(),
-                                current.getPosition().getY(), grid.getGoal().getX(), grid.getGoal().getY()));
+                                current.getPosition().getY(), getGoal().getX(), getGoal().getY()));
                         break;
                     default:
                         node.setFScore(node.getGScore() + GeoMath.octileDistance(current.getPosition().getX(),
-                                current.getPosition().getY(), grid.getGoal().getX(), grid.getGoal().getY()));
+                                current.getPosition().getY(), getGoal().getX(), getGoal().getY()));
                         break;
                 }
                 mOpenList.add(node);

@@ -4,6 +4,9 @@ import planning.agent.Node;
 
 import java.util.LinkedList;
 
+/**
+ * Represents a grid based world for an agent to path across.
+ */
 public class Grid {
 
     /*
@@ -14,8 +17,6 @@ public class Grid {
     private int iObstacleWidth;         // The obstacle width
     private int iObstacleHeight;        // The obstacle height
     private double dPercentObstacles;   // The percent of the map that is occupied
-    private Point mStart;               // The start point
-    private Point mGoal;                // The goal point
 
 
     /*
@@ -29,20 +30,13 @@ public class Grid {
      * @param obsWidth int: The maximum width of obstacles on the grid.
      * @param obsHeight int: The maximum height of obstacles on the grid.
      * @param percentObs double: The percent of obstacles on the grid.
-     * @param sx int: The x ordinal of the starting point.
-     * @param sy int: The y ordinal of the starting point.
-     * @param gx int: The x ordinal of the goal point.
-     * @param gy int: The y ordinal of the goal point.
      */
     public Grid(int width, int height, int obsWidth,
-                int obsHeight, double percentObs, int sx, int sy,
-                int gx, int gy) {
+                int obsHeight, double percentObs) {
         mGrid = new State[height][width];
         iObstacleWidth = obsWidth;
         iObstacleHeight = obsHeight;
         dPercentObstacles = percentObs;
-        mStart = new Point(sx, sy);
-        mGoal = new Point(gx, gy);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 mGrid[y][x] = State.EMPTY;
@@ -122,22 +116,6 @@ public class Grid {
         if (dPercentObstacles >= 0 || dPercentObstacles <= .5) {
             dPercentObstacles = percent;
         }
-    }
-
-    /**
-     * Returns the starting position.
-     * @return Point: The starting position.
-     */
-    public Point getStart() {
-        return mStart;
-    }
-
-    /**
-     * Returns the goal position.
-     * @return Point: The goal position.
-     */
-    public Point getGoal() {
-        return mGoal;
     }
 
     /*
@@ -226,15 +204,6 @@ public class Grid {
             default:
                 return "-";
         }
-    }
-
-    /**
-     * Determines if a node is equal to the goal position.
-     * @param node Node: The node to check.
-     * @return boolean: Whether the position is equal to the goal or not.
-     */
-    public boolean isGoalNode(Node node) {
-        return mGoal.getX() == node.getPosition().getX() && mGoal.getY() == node.getPosition().getY();
     }
 
     /**
@@ -426,26 +395,6 @@ public class Grid {
             sb.append("\n");
         }
         return sb.toString();
-    }
-
-    /**
-     * Updates the goal node to the specified coordinates.
-     * @param x int: The x ordinal for the goal node.
-     * @param y int: The y ordinal for the goal node.
-     */
-    public void updateGoal(int x, int y) {
-        getStart().setX(x);
-        getStart().setY(y);
-    }
-
-    /**
-     * Updates the start node to the specified coordinates.
-     * @param x int: THe x ordinal for the start node.
-     * @param y int: The y ordinal for the start node.
-     */
-    public void updateStart(int x, int y) {
-        getGoal().setX(x);
-        getGoal().setY(y);
     }
 
 }

@@ -26,10 +26,14 @@ public class BFSAgent extends Agent {
     /**
      * Creates an instance of a BFSAgent with the specified parameters.
      */
-    public BFSAgent() {
-        super();
+    public BFSAgent(int sx, int sy, int gx, int gy) {
+        super(sx, sy, gx, gy);
         mOpenList = new ArrayDeque<>();
         mClosedList = new HashSet<>();
+    }
+
+    public BFSAgent(Point start, Point goal) {
+        this(start.getX(), start.getY(), goal.getX(), goal.getY());
     }
 
     /*
@@ -44,11 +48,11 @@ public class BFSAgent extends Agent {
     public LinkedList<Point> traverse(Grid grid) {
         mOpenList.clear();
         mClosedList.clear();
-        mOpenList.add(new Node(grid.getStart()));
+        mOpenList.add(new Node(getStart()));
         Node mCurrent = null;
         while (!mOpenList.isEmpty()) {
             mCurrent = mOpenList.poll();
-            if (grid.isGoalNode(mCurrent)) {
+            if (isGoalNode(mCurrent)) {
                 return generatePath(mCurrent);
             }
             for (Point p : grid.generateNeighbors(mCurrent.getPosition().getX(), mCurrent.getPosition().getY())) {

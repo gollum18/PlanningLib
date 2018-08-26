@@ -1,5 +1,8 @@
 package planning.geom;
 
+/**
+ * Represents a point in cartesian space.
+ */
 public class Point {
 
     /*
@@ -36,27 +39,11 @@ public class Point {
     }
 
     /**
-     * Updates the x ordinal of the point.
-     * @param x int: A x ordinal for the point.
-     */
-    public void setX(int x) {
-        iX = x;
-    }
-
-    /**
      * Gets the y ordinal of the point.
      * @return int: The y ordinal of the point.
      */
     public int getY() {
         return iY;
-    }
-
-    /**
-     * Updates the y ordinal of the point.
-     * @param y int: A y ordinal for the point.
-     */
-    public void setY(int y) {
-        iY = y;
     }
 
     /*

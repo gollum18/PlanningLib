@@ -37,8 +37,8 @@ public class RRTAgent extends Agent {
      * @param epsilon double:
      * @param nodes int: The maximum amount of nodes to generate
      */
-    public RRTAgent(double epsilon, int nodes) {
-        super();
+    public RRTAgent(int sx, int sy, int gx, int gy, double epsilon, int nodes) {
+        super(sx, sy, gx, gy);
         if (epsilon < MIN_EPSILON) {
             epsilon = DEFAULT_EPSILON;
         }
@@ -48,6 +48,10 @@ public class RRTAgent extends Agent {
         mNodes = new ArrayList<>(nodes+1);
         dEpsilon = epsilon;
         iMaxNodes = nodes;
+    }
+
+    public RRTAgent(Point start, Point goal, double epsilon, int nodes) {
+        this(start.getX(), start.getY(), goal.getX(), goal.getY(), epsilon, nodes);
     }
 
     /*
@@ -114,7 +118,7 @@ public class RRTAgent extends Agent {
      */
     public LinkedList<Point> traverse(Grid grid) {
         mNodes.clear();
-        mNodes.add(new Node(grid.getStart()));
+        mNodes.add(new Node(getStart()));
         for (int i = 0; i < iMaxNodes; i++) {
             Point rand = grid.random();
             // Have to deal with the possibility of wasting a node on an obstacle
@@ -135,7 +139,7 @@ public class RRTAgent extends Agent {
             // Check visibility and goal state, add it to the list of nodes if necessary
             if (grid.lineOfSight(nn.getPosition(), rand)) {
                 Node newnode = new Node(rand, nn);
-                if (grid.isGoalNode(newnode)) {
+                if (isGoalNode(newnode)) {
                     return generatePath(newnode);
                 }
                 mNodes.add(newnode);
